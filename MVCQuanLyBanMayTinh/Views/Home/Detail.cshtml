@@ -1,0 +1,81 @@
+﻿@model MVCQuanLyBanMayTinh.Models.Computer
+@{
+    ViewData["Title"] = "Cấu Hình Thiết Bị - " + Model.Name;
+}
+<link rel="stylesheet" href="~/css/computer-style.css" />
+
+<div class="container mt-5 mb-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb small">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")" class="text-decoration-none">Cửa hàng</a></li>
+            <li class="breadcrumb-item active text-dark fw-medium" aria-current="page">Chi tiết cấu hình</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5">
+        <div class="col-md-5">
+            <div class="p-4 border border-light rounded-3 bg-white text-center shadow-sm">
+                <img src="@(string.IsNullOrEmpty(Model.Image) ? "/images/default-computer.jpg" : Model.Image)" class="img-fluid object-fit-contain" style="max-height: 380px;" alt="" />
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="tech-spec-container">
+                <div class="mb-2">
+                    <span class="badge bg-primary text-white px-3 py-2 rounded">@Model.Brand</span>
+                    <span class="badge bg-light text-dark border px-3 py-2 rounded ms-1">@Model.Category?.Name</span>
+                </div>
+                
+                <h3 class="fw-bold text-dark mt-2 mb-1">@Model.Name</h3>
+                <h4 class="fw-bold text-primary mb-4">@Model.Price.ToString("N0") đ</h4>
+
+                <h6 class="fw-bold text-dark mb-3"><i class="bi bi-cpu text-primary me-2"></i> THÔNG SỐ PHẦN CỨNG LINH KIỆN</h6>
+                
+                <div class="table-responsive rounded-3 border mb-4">
+                    <table class="table tech-spec-table m-0 align-middle">
+                        <tbody>
+                            @if (!string.IsNullOrEmpty(Model.Description))
+                            {
+                                var textRows = Model.Description.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                                foreach (var rowText in textRows)
+                                {
+                                    if (rowText.Contains(':'))
+                                    {
+                                        var segment = rowText.Split(new[] { ':' }, 2);
+                                        <tr>
+                                            <th>@segment[0].Trim()</th>
+                                            <td class="text-dark fw-medium">@segment[1].Trim()</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <th class="text-muted">Thông số máy</th>
+                                            <td class="text-dark fw-medium">@rowText.Trim()</td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="2" class="text-muted text-center py-3">Thông số chi tiết phần cứng đang được cập nhật.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4 p-3 bg-light rounded-3 small font-monospace">
+                    <span class="text-muted">Số lượng máy sẵn kho: <strong>@Model.Quantity</strong> chiếc</span>
+                    <span class="@(Model.Quantity > 0 ? "badge-tech-in" : "badge-tech-out")">@Model.Status</span>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary btn-lg flex-grow-1" @(Model.Quantity == 0 ? "disabled" : "") style="border-radius:8px;">Đặt Mua Thiết Bị</button>
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary btn-lg px-4" style="border-radius:8px;">Quay về</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

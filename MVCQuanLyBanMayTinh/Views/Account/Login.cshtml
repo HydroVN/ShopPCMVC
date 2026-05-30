@@ -1,0 +1,33 @@
+﻿@model MVCQuanLyBanMayTinh.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Đăng Nhập";
+}
+<link rel="stylesheet" href="~/css/computer-style.css" />
+
+<div class="container">
+    <div class="form-auth-wrapper bg-white">
+        <h4 class="fw-bold text-center mb-4 text-dark">ĐĂNG NHẬP HỆ THỐNG</h4>
+        
+        <form asp-action="Login" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Username" class="form-label small fw-bold">Tên đăng nhập</label>
+                <input asp-for="Username" class="form-control py-2" placeholder="Nhập tài khoản đăng nhập..." />
+                <span asp-validation-for="Username" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label small fw-bold">Mật khẩu</label>
+                <input asp-for="Password" type="password" class="form-control py-2" placeholder="Nhập mật khẩu..." />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 mt-2">Đăng nhập</button>
+        </form>
+        <div class="text-center mt-4 small">
+            <span class="text-muted">Chưa có tài khoản?</span> 
+            <a href="@Url.Action("Register", "Account")" class="fw-bold text-decoration-none">Đăng ký mới</a>
+        </div>
+    </div>
+</div>

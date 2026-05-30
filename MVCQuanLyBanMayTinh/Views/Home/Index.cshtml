@@ -1,0 +1,59 @@
+﻿@model IEnumerable<MVCQuanLyBanMayTinh.Models.Computer>
+@{
+    ViewData["Title"] = "TechStore - Danh Sách Máy Tính";
+}
+<link rel="stylesheet" href="~/css/computer-style.css" />
+
+<div class="container mt-4">
+    <div class="tech-search-banner mb-4">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h3 class="fw-bold mb-2">Hệ Thống Phân Phối Máy Tính Cao Cấp</h3>
+                <p class="text-white-50 m-0">Tìm kiếm dòng thiết bị cấu hình mạnh mẽ đáp ứng tối đa mọi tác vụ xử lý đồ họa, lập trình phần mềm và giải trí đỉnh cao.</p>
+            </div>
+            <div class="col-lg-5 mt-3 mt-lg-0">
+                <form method="get" action="@Url.Action("Index", "Home")" class="input-group">
+                    <input type="text" name="search" class="form-control border-0 bg-white" placeholder="Tìm tên máy tính, hãng sản xuất..." value="@ViewBag.CurrentSearch" style="padding: 12px;" />
+                    <button type="submit" class="btn btn-primary px-4">Tìm kiếm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-sm @(ViewBag.CurrentCategory == null ? "btn-dark" : "btn-light border") px-3 py-2 rounded-3">Tất Cả Danh Mục</a>
+            @foreach (var cat in ViewBag.Categories)
+            {
+                <a href="@Url.Action("Index", "Home", new { categoryId = cat.Id, search = ViewBag.CurrentSearch })" 
+                   class="btn btn-sm @(ViewBag.CurrentCategory == cat.Id ? "btn-dark" : "btn-light border") px-3 py-2 rounded-3">@cat.Name</a>
+            }
+        </div>
+        <span class="text-muted small fw-medium">Tổng số: @Model.Count() sản phẩm</span>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-4 g-4 mb-5">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="computer-grid-card p-3 h-100 d-flex flex-column" style="cursor: pointer;" onclick="location.href='@Url.Action("Detail", "Home", new { id = item.Id })'">
+                    <div class="position-relative">
+                        <img src="@(string.IsNullOrEmpty(item.Image) ? "/images/default-computer.jpg" : item.Image)" class="computer-grid-img rounded-3" alt="@item.Name" />
+                        <span class="position-absolute bottom-0 start-0 m-2 badge bg-dark text-white font-monospace small border">@item.Brand</span>
+                    </div>
+                    
+                    <div class="card-body p-0 mt-3 d-flex flex-column flex-grow-1">
+                        <h6 class="fw-bold text-dark mb-2 text-truncate-2" style="min-height:42px; line-height:1.4;">@item.Name</h6>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-2">
+                            <span class="fw-bold text-primary fs-5">@item.Price.ToString("N0") đ</span>
+                            <span class="@(item.Quantity > 0 ? "badge-tech-in" : "badge-tech-out")">
+                                @(item.Quantity > 0 ? "Còn hàng" : "Hết hàng")
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
